@@ -1,0 +1,3395 @@
+openapi: 3.0.0
+info:
+  description: >-
+     This specification provides sample API for using ABD API
+
+  version: 1.0.0
+  title: API for ADB
+servers:
+  - url: 'http://localhost:8080/'
+    description: Local
+paths:
+  /api/login:
+    post:
+      tags:
+        - Login
+      summary: Verify userid and password and returns tokenID
+      description: Verify userid and password and returns tokenID
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User Name
+                  example: ttsgroupblockchain
+                password:
+                  type: string
+                  description: Password
+                  example: pass2020
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Login successful
+                  payload:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        description: Access Token
+                        example: >-
+                          eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjYzAwNDM0ZS1kYTk2LTRkOWItYjZkNC01YTYyNzZlMDdhMDkifQ.eyJleHAiOjE2MDMyMTMyMjMsImlhdCI6MTYwMzIxMjYyMywianRpIjoiYjQ1YzRhZWItOTMzMS00ZTFlLTk1MWUtMjBjNTY1MjI1MGU3IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDcwL2F1dGgvcmVhbG1zL2FkYnJlYWxtIiwic3ViIjoiZTk1ZmI4MmYtODA1OS00MDNmLWJmMDUtMTUyZTJkNGI5OGU2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYWRiY2xpZW50Iiwic2Vzc2lvbl9zdGF0ZSI6ImQ0NDFhYTdlLTgwZDMtNDQ2OS1hODdkLTg4ODRiOWQyMzE1ZSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDcwIl0sInJlc291cmNlX2FjY2VzcyI6eyJhZGJjbGllbnQiOnsicm9sZXMiOlsic2hpcHBpbmctYWdlbnQiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiVFRTIEdyb3VwIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidHRzZ3JvdXBibG9ja2NoYWluIiwiZ2l2ZW5fbmFtZSI6IlRUUyIsImZhbWlseV9uYW1lIjoiR3JvdXAifQ.Oemf4KU20oEZzMiGejEEDLXbhZ0u232P8EekBq9Yh7E
+                      refreshToken:
+                        type: string
+                        description: Refresh Token
+                        example: >-
+                          eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjYzAwNDM0ZS1kYTk2LTRkOWItYjZkNC01YTYyNzZlMDdhMDkifQ.eyJleHAiOjE2MDMyMTQ0MjMsImlhdCI6MTYwMzIxMjYyMywianRpIjoiMjY0YTA0ZjQtZTc0Zi00YTA5LWExNjEtMGY5MmM3YmQ1OTI2IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDcwL2F1dGgvcmVhbG1zL2FkYnJlYWxtIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDcwL2F1dGgvcmVhbG1zL2FkYnJlYWxtIiwic3ViIjoiZTk1ZmI4MmYtODA1OS00MDNmLWJmMDUtMTUyZTJkNGI5OGU2IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImFkYmNsaWVudCIsInNlc3Npb25fc3RhdGUiOiJkNDQxYWE3ZS04MGQzLTQ0NjktYTg3ZC04ODg0YjlkMjMxNWUiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIn0.6LrtXlcTXIpx3QR2loMljwogWCGMHqb3fVKwOIxVIz0
+                    description: payload
+                  tokenType:
+                    type: string
+                    description: Type of the token
+                    example: bearer
+                  userName:
+                    type: string
+                    description: User Name
+                    example: ttsgroupblockchain
+                  userRole:
+                    type: array
+                    items:
+                      type: string
+                      example: shipping-agent
+                    description: User Role
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+  /api/addDocument:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Document Store
+      summary: Adds document to the document Store
+      description: Adds document to the document Store
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+                  description: File to be uploaded
+      responses:
+        '200':
+          description: File Uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Login successful
+                  payload:
+                    type: string
+                    description: documentId
+                    example: sdwk89823238sjijidc
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '500':
+          description: Internal Server Error.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  '/api/getDocumentById':
+    get:
+      security:
+      - bearerAuth: []
+      tags:
+        - Document Store
+      summary: Return the file for given fileId
+      description: Returns a single document
+      parameters:
+        - name: fileId
+          in: query
+          description: ID of file to return
+          required: true
+          schema:
+            type: string
+            example: 38c9792d725c45dd431699e6a3b0f0
+      responses:
+        '200':
+          description: ok
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                description: Used only with `application/pdf` responses
+                example: attachment; filename="name.pdf"
+        '400':
+          description: File download Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: File Download Failed
+                  payload:
+                    type: string
+                    description: documentId
+                    example: sdwk89823238sjijidc
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: false
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '500':
+          description: Internal Server Error.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/arrivalnotice:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Creates Arrival Notice
+      description: creates Arrival Notice
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vesselName:
+                  type: string
+                  description: Vessel Name
+                  example: ROSSINI
+                vesselType:
+                  type: string
+                  description: vesselType
+                voyageNumber:
+                  type: string
+                  description: voyageNumber
+                  example: 04G6FW1MA
+                vesselRegistrationNumber:
+                  type: string
+                grossTonnage:
+                  type: string
+                airDraft:
+                  type: string
+                callSign:
+                  type: string
+                netTonnage:
+                  type: string
+                purposeofVisit:
+                  type: string
+                vesselFlag:
+                  type: string
+                deadWeight:
+                  type: string
+                bowThruster:
+                  type: string
+                imoNumber:
+                  type: string
+                loa:
+                  type: string
+                preferredBerth:
+                  type: string
+                mmsiNumber:
+                  type: string
+                breadth:
+                  type: string
+                keelLaid:
+                  type: string
+                ownerofVessel:
+                  type: string
+                arrivalDraft:
+                  type: string
+                totalCrew:
+                  type: string
+                agentName:
+                  type: string
+                agentRegistrationNo:
+                  type: string
+                emailAddress:
+                  type: string
+                agentFaxNumber:
+                  type: string
+                agentTelephoneNo:
+                  type: string
+                agentMobileNo:
+                  type: string
+                arrivalDate:
+                  type: string
+                arrivalTime:
+                  type: string
+                lastDeparturePortDate:
+                  type: string
+                lastDeparturePortTime:
+                  type: string
+                lastPort:
+                  type: string
+                nextPort:
+                  type: string
+                portOfArrival:
+                  type: string
+                portOfDeparture:
+                  type: string
+                dangerousCargoTonnage:
+                  type: string
+                cargoOnBoardTonnage:
+                  type: string
+                noOfContainersToBeDischarged:
+                  type: string
+                bolMap:
+                  additionalProperties:
+                     $ref: '#/components/schemas/BolMap'
+                  properties:
+                    bol1:
+                     $ref: '#/components/schemas/BolMap'
+      responses:
+        '200':
+          description: Successfully arrival notice inserted in blockchain
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Successfully arrival notice inserted in blockchain
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Page Not Found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/arrivalnotice/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalNoticeId:
+                  type: string
+                  description: Arrival Notice Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/ff/arrivalnotice/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id For FF
+      description: Get Arrival Notice By Id for FF
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalNoticeId:
+                  type: string
+                  description: FreightForwarder Id
+                  example: 12344667788efc
+                ffId:
+                  type: string
+                  description: Arrival Notice Id
+                  example: FF123
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/arrivalnotice/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalNoticeId:
+                  type: string
+                  description: Arrival Notice Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/arrivalnotice/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalNoticeId:
+                  type: string
+                  description: Arrival Notice Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/arrivalnotice/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                bookmark:
+                  type: string
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/ff/arrivalnotice/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                bookmark:
+                  type: string
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/arrivalnotice/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookmark:
+                  type: string
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/arrivalnotice/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Get Arrival Notice By Id
+      description: Get Arrival Notice By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookmark:
+                  type: string
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ArrivalNotice'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/arrivalnotice/searcheta:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Search ETA
+      description: Search ETA
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Voyage'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/arrivalnotice/searcheta:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Search ETA
+      description: Search ETA
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Voyage'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/arrivalnotice/uploadBlDetails:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Arrival Notice
+      summary: Upload the BL Details
+      description: Upload the BL Details
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+                  description: File to be uploaded
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Document data added successfully
+                  payload:
+                    type: array
+                    items:
+                      type: object
+                      properties: 
+                        blNumber:
+                          type: string
+                          description: blNumber
+                          example: bl1
+                        noOfContainers:
+                          type: string
+                          description: noOfContainers
+                          example: 3
+                        containerId:
+                          type: array
+                          items:
+                            type: string
+                            example: 12,13,14
+                        freightName:
+                          type: string
+                          description: freightName
+                          example: ff1
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '500':
+          description: Internal Server Error.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/refdata/shippingagent:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Shipping Agent
+      summary: Creates shipping agent
+      description: creates shipping agent
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+             type: array
+             items:
+              type: object
+              properties:
+                created_at:
+                  type: string
+                  description: Created At
+                  example: 27 Mar 2019 14:02
+                d_id:
+                  type: string
+                  example: 11951
+                email:
+                  type: string
+                formated_name:
+                  type: string
+                  description: formated_name
+                  example: Albereich International Pvt Ltd
+                id:
+                  type: integer
+                  description: id
+                  example: 24869
+                identifier:
+                  type: string
+                  description: identifier
+                  example: C00162019
+                latest_version:
+                  type: integer
+                  description: id
+                  example: 24869
+                name:
+                  type: string
+                  description: name
+                  example: Albereich International Pvt Ltd
+                name_with_nid:
+                  type: string
+                  description: name_with_nid
+                  example: ALBEREICH INTERNATIONAL PVT LTD (C00162019)
+                phone:
+                  type: string
+                  description: id
+                  example: 7900074
+                profile_id:
+                  type: integer
+                  description: profile_id
+                  example: 38964
+                profileable_id:
+                  type: integer
+                  description: profileable_id
+                  example: 11951
+                profileable_type:
+                  type: string
+                  description: profileable_type
+                  example: Organisation
+                tin:
+                  type: string
+                  description: tin
+                  example: 1100467GST501
+                verified:
+                  type: integer
+                  description: verified
+                  example: 1
+                updated_at:
+                  type: string
+                  description: profile_id
+                  example: 27 Mar 2019 14:02
+                deleted_at:
+                  type: string
+                  description: deleted_at
+                src:
+                  type: string
+                  description: src
+                  example: 38964
+      responses:
+        '200':
+          description: Successfully Shipping agent inserted in blockchain
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Successfully shipping agent inserted in blockchain
+                  payload:
+                    type: string
+                    description: description
+                    example: 1 record inserted into blockchain
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Page Not Found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'            
+  /api/refdata/shippingagent/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Shipping Agent
+      summary: Get All Shipping Agent
+      description: Get All Shipping Agent
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/ShippingAgent'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/refdata/shippingagent/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Shipping Agent
+      summary: Get Shipping Agent By Id
+      description: Get Shipping Agent By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ItemId:
+                  type: string
+                  description: Shipping Agent Id
+                  example: abc12344667788
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/ShippingAgent'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/refdata/broker:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Broker
+      summary: Creates Broker
+      description: creates Broker
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+             type: array
+             items:
+              type: object
+              properties:
+                created_at:
+                  type: string
+                  description: Created At
+                  example: 27 Mar 2019 14:02
+                d_id:
+                  type: string
+                  example: 11951
+                email:
+                  type: string
+                name:
+                  type: string
+                  description: name
+                  example: Albereich International Pvt Ltd
+                id:
+                  type: integer
+                  description: id
+                  example: 24869
+                identifier:
+                  type: string
+                  description: identifier
+                  example: C00162019
+                latest_version:
+                  type: integer
+                  description: id
+                  example: 24869
+                formatted_name:
+                  type: string
+                  description: formatted_name
+                  example: Albereich International Pvt Ltd
+                name_with_nid:
+                  type: string
+                  description: name_with_nid
+                  example: ALBEREICH INTERNATIONAL PVT LTD (C00162019)
+                phone:
+                  type: string
+                  description: id
+                  example: 7900074
+                profile_id:
+                  type: integer
+                  description: profile_id
+                  example: 38964
+                profileable_id:
+                  type: integer
+                  description: profileable_id
+                  example: 11951
+                profileable_type:
+                  type: string
+                  description: profileable_type
+                  example: Organisation
+                tin:
+                  type: string
+                  description: tin
+                  example: 1100467GST501
+                verified:
+                  type: integer
+                  description: verified
+                  example: 1
+                updated_at:
+                  type: string
+                  description: profile_id
+                  example: 27 Mar 2019 14:02
+                deleted_at:
+                  type: string
+                  description: deleted_at
+                src:
+                  type: string
+                  description: src
+                  example: MPL
+      responses:
+        '200':
+          description: Successfully Broker inserted in blockchain
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Successfully Broker inserted in blockchain
+                  payload:
+                    type: string
+                    description: description
+                    example: 1 record inserted into blockchain
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Page Not Found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'            
+  /api/refdata/broker/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Broker
+      summary: Get All Broker
+      description: Get All Broker
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Broker'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/refdata/broker/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Broker
+      summary: Get Broker By Id
+      description: Get Broker By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ItemId:
+                  type: string
+                  description: Broker Id
+                  example: abc12344667788
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/Broker'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'  
+  /api/refdata/vessel:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Vessel
+      summary: Creates Vessel
+      description: creates Vessel
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+             type: array
+             items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: id
+                  example: 24869
+                name:
+                  type: string
+                  description: name
+                  example: Albereich International Pvt Ltd
+                owner:
+                  type: string
+                  example: GLOBAL SHIP LEASE 9 LIMITED
+                is_local:
+                  type: integer
+                  description: is_local
+                  example: 0
+                vessel_type_id:
+                  type: integer
+                  description: vessel_type_id
+                  example: 3
+                created_at:
+                  type: string
+                  description: Created At
+                  example: 27 Mar 2019 14:02
+                updated_at:
+                  type: string
+                  description: profile_id
+                  example: 27 Mar 2019 14:02
+                deleted_at:
+                  type: string
+                  description: deleted_at
+                src:
+                  type: string
+                  description: src
+                  example: MPL
+                registration_number:
+                  type: string
+                  example: 11951
+                gross_register_tonnage:
+                  type: integer
+                  example: 233445                
+                year_built:
+                  type: integer
+                  description: year_built
+                  example: 2001
+                status:
+                  type: string
+                  description: status
+                  example: active
+                material_id:
+                  type: integer
+                  description: material_id
+                  example: 3
+                name_with_registration_number:
+                  type: string
+                  description: verified
+                  example: CMA CGM LA TOUR (8001952)
+      responses:
+        '200':
+          description: Successfully Broker inserted in blockchain
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Successfully Vessel inserted in blockchain
+                  payload:
+                    type: string
+                    description: description
+                    example: 1 record inserted into blockchain
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Page Not Found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'            
+  /api/refdata/Vessel/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Vessel
+      summary: Get All Vessel
+      description: Get All Vessel
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Vessel'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/refdata/Vessel/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Vessel
+      summary: Get Vessel By Id
+      description: Get Vessel By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ItemId:
+                  type: string
+                  description: Vessel Id
+                  example: abc12344667788
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved
+                  payload:
+                    $ref: '#/components/schemas/Vessel'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'  
+  /api/sa/manifest/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get Manifest By Id
+      description: Get Manifest By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manifestId:
+                  type: string
+                  description: Manifest Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived manifest data from blockchain
+                  payload:
+                    $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/manifest/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get Manifest By Id
+      description: Get Manifest By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manifestId:
+                  type: string
+                  description: Manifest Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived manifest data from blockchain
+                  payload:
+                    $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/manifest/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get Manifest By Id
+      description: Get Manifest By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manifestId:
+                  type: string
+                  description: Manifest Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived manifest data from blockchain
+                  payload:
+                    $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/ff/manifest/getById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get Manifest By Id
+      description: Get Manifest By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manifestId:
+                  type: string
+                  description: Manifest Id
+                  example: 12344667788efc
+                ffId:
+                  type: string
+                  description: Freight Forwarder Id
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived manifest data from blockchain
+                  payload:
+                    $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/manifest/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get All Manifest details
+      description: Get All Manifest details
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Id
+                  example: 12344667788efc
+                bookmark:
+                  type: string
+                  description: Bookmark
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/ff/manifest/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get All Manifest details
+      description: Get All Manifest details
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Id
+                  example: 12344667788efc
+                bookmark:
+                  type: string
+                  description: Bookmark
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/manifest/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get All Manifest details
+      description: Get All Manifest details
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookmark:
+                  type: string
+                  description: Bookmark
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/manifest/getAll:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get All Manifest details
+      description: Get All Manifest details
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookmark:
+                  type: string
+                  description: Bookmark
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Data Successfully retrieved 
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/Manifest'
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/uploadHBL:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Upload the HBL Document
+      description: Upload the HBL Document
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+                  description: File to be uploaded
+                arrivalNoticeID:
+                    type: string
+                    description: arrivalNoticeID
+                    example: AN2345
+                ffid:
+                    type: string
+                    description: ffid
+                    example: ff123
+      responses:
+        '200':
+          description: File Uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: HBL added successfully,Blockchain will update the data
+                  payload:
+                    type: string
+                    description: arrivalNoticeID
+                    example: AN456
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '500':
+          description: Internal Server Error.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/manifest/getMBLById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get MBL By Id
+      description: Get MBL By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uhbolNo:
+                  type: string
+                  description: uhbolNo
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived MBL data from blockchain
+                  payload:
+                    type: object
+                    properties: 
+                      arrivalNoticeId:
+                        type: string
+                        description: Arrival Notice Id
+                        example: AN288986
+                      containerNumbers:
+                        type: array
+                        items: 
+                          type: string
+                          example: IPXU3958585
+                      createTs:
+                        type: string
+                        description: createTs
+                        example: 2020.11.23.10.45.53.082
+                      createdBy:
+                        type: string
+                        description: created By
+                        example: SA00015
+                      cutOffDate:
+                        type: string
+                        description: cutOffDate
+                        example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+                      docType:
+                        type: string
+                        description: docType
+                        example: mbolDetails
+                      documentHash:
+                        type: string
+                        description: documentHash
+                      freightForwarderId:
+                        type: string
+                        description: freightForwarderId
+                        example: FF000012
+                      freightForwarderName:
+                        type: string
+                        description: freightForwarderName
+                        example: FF000012
+                      isDraft:
+                        type: string
+                        description: isDraft
+                        example: FF000012
+                      manifestID:
+                        type: string
+                        description: manifestID
+                        example: MFAN288986
+                      mbolNo:
+                        type: string
+                        description: mbolNo
+                        example: THD0585321
+                      shippingAgentId:
+                        type: string
+                        description: shippingAgentId
+                        example: SA00015
+                      status:
+                        type: string
+                        description: status
+                        example: PENDING_HBL_UPLOAD
+                      totalContainerCount:
+                        type: string
+                        description: totalContainerCount
+                        example: FF000012
+                      trxnId:
+                        type: string
+                        description: trxnId
+                        example: 36bb8bf648a32669ddc4fe4036a3310be06293b7e455e0a62ef1b8195fec9187
+                      ubolNo:
+                        type: string
+                        description: ubolNo
+                        example: AN288986-THD0585321
+                      updatedBy:
+                        type: string
+                        description: updatedBy
+                        example: SA00015
+                      updatedTs:
+                        type: string
+                        description: updatedTs
+                        example: 2020.11.23.10.45.53.082
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/ff/manifest/getMBLById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get MBL By Id
+      description: Get MBL By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uhbolNo:
+                  type: string
+                  description: uhbolNo
+                  example: 12344667788efc
+                ffId:
+                  type: string
+                  description: ffId
+                  example: ff123
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived MBL data from blockchain
+                  payload:
+                    type: object
+                    properties: 
+                      arrivalNoticeId:
+                        type: string
+                        description: Arrival Notice Id
+                        example: AN288986
+                      containerNumbers:
+                        type: array
+                        items: 
+                          type: string
+                          example: IPXU3958585
+                      createTs:
+                        type: string
+                        description: createTs
+                        example: 2020.11.23.10.45.53.082
+                      createdBy:
+                        type: string
+                        description: created By
+                        example: SA00015
+                      cutOffDate:
+                        type: string
+                        description: cutOffDate
+                        example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+                      docType:
+                        type: string
+                        description: docType
+                        example: mbolDetails
+                      documentHash:
+                        type: string
+                        description: documentHash
+                      freightForwarderId:
+                        type: string
+                        description: freightForwarderId
+                        example: FF000012
+                      freightForwarderName:
+                        type: string
+                        description: freightForwarderName
+                        example: FF000012
+                      isDraft:
+                        type: string
+                        description: isDraft
+                        example: FF000012
+                      manifestID:
+                        type: string
+                        description: manifestID
+                        example: MFAN288986
+                      mbolNo:
+                        type: string
+                        description: mbolNo
+                        example: THD0585321
+                      shippingAgentId:
+                        type: string
+                        description: shippingAgentId
+                        example: SA00015
+                      status:
+                        type: string
+                        description: status
+                        example: PENDING_HBL_UPLOAD
+                      totalContainerCount:
+                        type: string
+                        description: totalContainerCount
+                        example: FF000012
+                      trxnId:
+                        type: string
+                        description: trxnId
+                        example: 36bb8bf648a32669ddc4fe4036a3310be06293b7e455e0a62ef1b8195fec9187
+                      ubolNo:
+                        type: string
+                        description: ubolNo
+                        example: AN288986-THD0585321
+                      updatedBy:
+                        type: string
+                        description: updatedBy
+                        example: SA00015
+                      updatedTs:
+                        type: string
+                        description: updatedTs
+                        example: 2020.11.23.10.45.53.082
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mcs/manifest/getMBLById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get MBL By Id
+      description: Get MBL By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uhbolNo:
+                  type: string
+                  description: uhbolNo
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived MBL data from blockchain
+                  payload:
+                    type: object
+                    properties: 
+                      arrivalNoticeId:
+                        type: string
+                        description: Arrival Notice Id
+                        example: AN288986
+                      containerNumbers:
+                        type: array
+                        items: 
+                          type: string
+                          example: IPXU3958585
+                      createTs:
+                        type: string
+                        description: createTs
+                        example: 2020.11.23.10.45.53.082
+                      createdBy:
+                        type: string
+                        description: created By
+                        example: SA00015
+                      cutOffDate:
+                        type: string
+                        description: cutOffDate
+                        example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+                      docType:
+                        type: string
+                        description: docType
+                        example: mbolDetails
+                      documentHash:
+                        type: string
+                        description: documentHash
+                      freightForwarderId:
+                        type: string
+                        description: freightForwarderId
+                        example: FF000012
+                      freightForwarderName:
+                        type: string
+                        description: freightForwarderName
+                        example: FF000012
+                      isDraft:
+                        type: string
+                        description: isDraft
+                        example: FF000012
+                      manifestID:
+                        type: string
+                        description: manifestID
+                        example: MFAN288986
+                      mbolNo:
+                        type: string
+                        description: mbolNo
+                        example: THD0585321
+                      shippingAgentId:
+                        type: string
+                        description: shippingAgentId
+                        example: SA00015
+                      status:
+                        type: string
+                        description: status
+                        example: PENDING_HBL_UPLOAD
+                      totalContainerCount:
+                        type: string
+                        description: totalContainerCount
+                        example: FF000012
+                      trxnId:
+                        type: string
+                        description: trxnId
+                        example: 36bb8bf648a32669ddc4fe4036a3310be06293b7e455e0a62ef1b8195fec9187
+                      ubolNo:
+                        type: string
+                        description: ubolNo
+                        example: AN288986-THD0585321
+                      updatedBy:
+                        type: string
+                        description: updatedBy
+                        example: SA00015
+                      updatedTs:
+                        type: string
+                        description: updatedTs
+                        example: 2020.11.23.10.45.53.082
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/mpl/manifest/getMBLById:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get MBL By Id
+      description: Get MBL By Id
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uhbolNo:
+                  type: string
+                  description: uhbolNo
+                  example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived MBL data from blockchain
+                  payload:
+                    type: object
+                    properties: 
+                      arrivalNoticeId:
+                        type: string
+                        description: Arrival Notice Id
+                        example: AN288986
+                      containerNumbers:
+                        type: array
+                        items: 
+                          type: string
+                          example: IPXU3958585
+                      createTs:
+                        type: string
+                        description: createTs
+                        example: 2020.11.23.10.45.53.082
+                      createdBy:
+                        type: string
+                        description: created By
+                        example: SA00015
+                      cutOffDate:
+                        type: string
+                        description: cutOffDate
+                        example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+                      docType:
+                        type: string
+                        description: docType
+                        example: mbolDetails
+                      documentHash:
+                        type: string
+                        description: documentHash
+                      freightForwarderId:
+                        type: string
+                        description: freightForwarderId
+                        example: FF000012
+                      freightForwarderName:
+                        type: string
+                        description: freightForwarderName
+                        example: FF000012
+                      isDraft:
+                        type: string
+                        description: isDraft
+                        example: FF000012
+                      manifestID:
+                        type: string
+                        description: manifestID
+                        example: MFAN288986
+                      mbolNo:
+                        type: string
+                        description: mbolNo
+                        example: THD0585321
+                      shippingAgentId:
+                        type: string
+                        description: shippingAgentId
+                        example: SA00015
+                      status:
+                        type: string
+                        description: status
+                        example: PENDING_HBL_UPLOAD
+                      totalContainerCount:
+                        type: string
+                        description: totalContainerCount
+                        example: FF000012
+                      trxnId:
+                        type: string
+                        description: trxnId
+                        example: 36bb8bf648a32669ddc4fe4036a3310be06293b7e455e0a62ef1b8195fec9187
+                      ubolNo:
+                        type: string
+                        description: ubolNo
+                        example: AN288986-THD0585321
+                      updatedBy:
+                        type: string
+                        description: updatedBy
+                        example: SA00015
+                      updatedTs:
+                        type: string
+                        description: updatedTs
+                        example: 2020.11.23.10.45.53.082
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /api/sa/manifest/approvedMBL:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+        - Manifest
+      summary: Get Approved MBL
+      description: Get Approved MBL
+      requestBody:
+        description: Request details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manifestId:
+                  type: string
+                  description: manifestId
+                  example: 12344667788efc
+                listOfMBLS:
+                  type: array
+                  items: 
+                    type: string
+                    description: manifestId
+                    example: 12344667788efc
+      responses:
+        '200':
+          description: Success user logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseMessage:
+                    type: string
+                    description: Response Message
+                    example: Retrived MBL data from blockchain
+                  payload:
+                    type : array
+                    items: 
+                      type: object
+                      properties: 
+                        arrivalNoticeId:
+                          type: string
+                          description: Arrival Notice Id
+                          example: AN288986
+                        containerNumbers:
+                          type: array
+                          items: 
+                            type: string
+                            example: IPXU3958585
+                        createTs:
+                          type: string
+                          description: createTs
+                          example: 2020.11.23.10.45.53.082
+                        createdBy:
+                          type: string
+                          description: created By
+                          example: SA00015
+                        cutOffDate:
+                          type: string
+                          description: cutOffDate
+                          example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+                        docType:
+                          type: string
+                          description: docType
+                          example: mbolDetails
+                        documentHash:
+                          type: string
+                          description: documentHash
+                        freightForwarderId:
+                          type: string
+                          description: freightForwarderId
+                          example: FF000012
+                        freightForwarderName:
+                          type: string
+                          description: freightForwarderName
+                          example: FF000012
+                        isDraft:
+                          type: string
+                          description: isDraft
+                          example: FF000012
+                        manifestID:
+                          type: string
+                          description: manifestID
+                          example: MFAN288986
+                        mbolNo:
+                          type: string
+                          description: mbolNo
+                          example: THD0585321
+                        shippingAgentId:
+                          type: string
+                          description: shippingAgentId
+                          example: SA00015
+                        status:
+                          type: string
+                          description: status
+                          example: APPROVED
+                        totalContainerCount:
+                          type: string
+                          description: totalContainerCount
+                          example: FF000012
+                        trxnId:
+                          type: string
+                          description: trxnId
+                          example: 36bb8bf648a32669ddc4fe4036a3310be06293b7e455e0a62ef1b8195fec9187
+                        ubolNo:
+                          type: string
+                          description: ubolNo
+                          example: AN288986-THD0585321
+                        updatedBy:
+                          type: string
+                          description: updatedBy
+                          example: SA00015
+                        updatedTs:
+                          type: string
+                          description: updatedTs
+                          example: 2020.11.23.10.45.53.082
+                  ts:
+                    type: string
+                    description: ts
+                    example: '2020-10-20-22:20:23.570'
+                  isSuccess:
+                    type: string
+                    description: is successful?
+                    example: true
+                  responseCode:
+                    type: integer
+                    description: response Code
+                    example: 0
+        '404':
+          description: Unauthorized
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+    ArrivalNotice:
+      type: object
+      properties:
+        vesselName:
+          type: string
+          description: Vessel Name
+          example: ROSSINI
+        vesselType:
+          type: string
+          description: vesselType
+        voyageNumber:
+          type: string
+          description: voyageNumber
+          example: 04G6FW1MA
+        vesselRegistrationNumber:
+          type: string
+        grossTonnage:
+          type: string
+        airDraft:
+          type: string
+        callSign:
+          type: string
+        netTonnage:
+          type: string
+        purposeofVisit:
+          type: string
+        vesselFlag:
+          type: string
+        deadWeight:
+          type: string
+        bowThruster:
+          type: string
+        imoNumber:
+          type: string
+        loa:
+          type: string
+        preferredBerth:
+          type: string
+        mmsiNumber:
+          type: string
+        breadth:
+          type: string
+        keelLaid:
+          type: string
+        ownerofVessel:
+          type: string
+        arrivalDraft:
+          type: string
+        totalCrew:
+          type: string
+        agentName:
+          type: string
+        agentRegistrationNo:
+          type: string
+        emailAddress:
+          type: string
+        agentFaxNumber:
+          type: string
+        agentTelephoneNo:
+          type: string
+        agentMobileNo:
+          type: string
+        arrivalNoticeId:
+          type: string
+          example: A653083
+        arrivalDate:
+          type: string
+        arrivalTime:
+          type: string
+        lastDeparturePortDate:
+          type: string
+        lastDeparturePortTime:
+          type: string
+        lastPort:
+          type: string
+        nextPort:
+          type: string
+        portOfArrival:
+          type: string
+        portOfDeparture:
+          type: string
+        dangerousCargoTonnage:
+          type: string
+        cargoOnBoardTonnage:
+          type: string
+        noOfContainersToBeDischarged:
+          type: string
+        status:
+          type: string
+          example: NEW
+        createdBy:
+          type: string
+        createTs:
+          type: string
+          example: 2020.10.30.09.28.03.329
+        updatedBy:
+          type: string
+          example: SH12345
+        updatedTs:
+          type: string
+          example: 2020.10.30.09.28.03.329
+        cts:
+          type: string
+        uts:
+          type: string
+        trxnId:
+          type: string
+          example: b43c7587e1cb8a30a7c74a125694cf40723da8e71c1d9251aa8abc06dca6719b
+        shippingAgentId:
+          type: string
+          example: SA1234
+        docType:
+          type: string
+          example: arrivalNotice
+        bolIds:
+          type: array
+          items:
+            type: string
+            example: MBL1
+        bolMap:
+          additionalProperties:
+            $ref: '#/components/schemas/MBLid'
+          properties:
+            Bol1:
+              $ref: '#/components/schemas/MBLid'
+    MBLid:
+      type: object
+      properties:
+        arrivalNoticeId:
+          type: string
+          example: A653083
+        containerNumber:
+          type: string
+        createTs:
+          type: string
+          example: 2020.10.30.09.28.03.329
+        createdBy:
+          type: string
+          example: SH12345
+        shippingAgentId:
+          type: string
+          example: SA1234
+        cutOffDate:
+          type: string
+        docType:
+          type: string
+          example: mbolDetails
+        documentHash:
+          type: string
+        freightForwarderName:
+          type: string
+          example: Asia Trading
+        mbolNo:
+          type: string
+          example: MBL1
+        notalContainerCount:
+          type: string
+        status:
+          type: string
+          example: NEW
+        trxnId:
+          type: string
+          example: b43c7587e1cb8a30a7c74a125694cf40723da8e71c1d9251aa8abc06dca6719b
+        ubolNo:
+          type: string
+          example: A653083-MBL1
+        updatedBy:
+          type: string
+          example: SH12345
+        updatedTs:
+          type: string
+          example: 2020.10.30.09.28.03.329
+    BolMap:
+      type: object
+      properties:
+        containerNumber:
+          type: string
+        cutOffDate:
+          type: string
+        documentHash:
+          type: string
+        freightForwarderName:
+          type: string
+          example: Asia Trading
+        mbolNo:
+          type: string
+          example: MBL1
+        notalContainerCount:
+          type: string
+        ubolNo:
+          type: string
+          example: A653083-MBL1
+    ShippingAgent:
+      type: object
+      properties:
+        agentHash:
+          type: string
+          description: agentHash
+          example: ab600e1c77128e15a51e5d00796e0052b8743fabf0d83f842ed5afece57f2b88
+        createdBy:
+          type: string
+          description: createdBy
+          example: suddutt2
+        createdTs:
+          type: string
+          description: created Ts
+          example: 2020.11.09.11.24.13.433
+        created_at:
+          type: string
+          description: created_at
+          example: 2019-02-21T00:00:00
+        d_id:
+          type: integer
+          description: d_id
+          example: 11951
+        deleted_at:
+          type: string
+          description: deleted_at
+        docType:
+          type: string
+          description: docType
+          example: shippingAgent
+        email:
+          type: string
+          description: email
+        expiryDate:
+          type: string
+          description: expiryDate
+          example: 2020-02-20T00:00:00
+        formated_name:
+          type: string
+          description: formated_name
+          example: Albereich International Pvt Ltd
+        mcsID:
+          type: string
+          description: mcsID
+          example: SA09090
+        mplID:
+          type: string
+          description: mplID
+          example: CA00162837
+        id:
+          type: integer
+          description: id
+          example: 24869 
+        identifier:
+          type: string
+          description: identifier
+          example: C00162019
+        latest_version:
+          type: integer
+          description: id
+          example: 24869
+        name:
+          type: string
+          description: name
+          example: Albereich International Pvt Ltd
+        name_with_nid:
+          type: string
+          description: name_with_nid
+          example: ALBEREICH INTERNATIONAL PVT LTD (C00162019)        
+        normalizedName:
+          type: string
+          description: normalizedName
+          example: ALBEREICH INTERNATIONAL PVT LTD
+        phone:
+          type: string
+          description: phone
+          example: 7900074
+        profile_id:
+          type: integer
+          description: profile_id
+          example: 38694
+        profileable_id:
+          type: string
+          description: profileable_id
+          example: 11951
+        profileable_type:
+          type: string
+          description: profileable_type
+          example: Org
+        tin:
+          type: string
+          description: tin
+          example: 1100467GST501
+        trxnId:
+          type: string
+          description: trxnid
+          example: 000-000-ABCDED
+        updatedBy:
+          type: string
+          description: updatedBy
+          example: suddttt2
+        voyageNumber:
+          type: string
+          description: voyageNumber
+          example: 04G6FW1MA
+        updatedTS:
+          type: string
+          description: updatedTS
+          example: 2020.11.09.11.24.13.433
+        updated_at:
+          type: string
+          description: updated_at
+          example: 04G6FW1MA
+        verified:
+          type: string
+          description: verified
+          example: 1
+    Vessel:
+      type: object
+      properties:
+        callSign:
+          type: string
+          description: callSign
+          example: C6ZN3
+        countryName:
+          type: string
+          description: countryName
+          example: BAHAMAS
+        createdBy:
+          type: string
+          description: created By
+          example: suddutt2
+        createdTs:
+          type: string
+          description: created Ts
+          example: 2020.11.09.11.24.13.433
+        created_at:
+          type: string
+          description: created_at
+          example: 2019-02-21T00:00:00
+        id:
+          type: integer
+          description: id
+          example: 11951
+        deleted_at:
+          type: string
+          description: deleted_at
+        docType:
+          type: string
+          description: docType
+          example: vessel
+        gross_register_tonnage:
+          type: integer
+          description: gross_register_tonnage
+          example: 26050
+        imoNumber:
+          type: integer
+          description: imoNumber
+          example: 9224946
+        is_local:
+          type: integer
+          description: is_local
+        mcsID:
+          type: string
+          description: mcsID
+          example: SA09090
+        mplID:
+          type: string
+          description: mplID
+          example: CA00162837
+        material_id:
+          type: integer
+          description: material_id
+          example: 24 
+        name:
+          type: string
+          description: name
+          example: CMA CGM LA TOUR
+        name_with_registration_number:
+          type: string
+          description: name_with_registration_number
+          example: CMA CGM LA TOUR (8001952)        
+        normalizedName:
+          type: string
+          description: normalizedName
+          example: CMA CGM LA TOUR (8001952)
+        owner:
+          type: string
+          description: owner
+          example: 1100467GST501
+        portname:
+          type: string
+          description: portname
+          example: NASSAU
+        registration_number:
+          type: string
+          description: registration_number
+          example: 8001952
+        status:
+          type: string
+          description: status
+          example: active
+        trxnId:
+          type: string
+          description: trxnid
+          example: 000-000-ABCDED
+        updatedBy:
+          type: string
+          description: updatedBy
+          example: suddttt2
+        updatedTS:
+          type: string
+          description: updatedTS
+          example: 2020.11.09.11.24.13.433
+        updated_at:
+          type: string
+          description: updated_at
+          example: 04G6FW1MA
+        vesselHash:
+          type: string
+          description: vesselHash
+          example: 1
+        vessel_type_id:
+          type: integer
+          description: vessel_type_id
+          example: 1
+        year_built:
+          type: string
+          description: year_built
+          example: 2001
+    Broker:
+      type: object
+      properties:
+        addressId:
+          type: integer
+          description: addressId
+          example: 239
+        apartmentName:
+          type: string
+          description: apartmentName
+          example: BAHAMAS
+        createdBy:
+          type: string
+          description: created By
+          example: suddutt2
+        createdTs:
+          type: string
+          description: created Ts
+          example: 2020.11.09.11.24.13.433
+        created_at:
+          type: string
+          description: created_at
+          example: 2019-02-21T00:00:00
+        id:
+          type: integer
+          description: id
+          example: 11951
+        d_id:
+          type: integer
+          description: d_id
+          example: 11951
+        deleted_at:
+          type: string
+          description: deleted_at
+        docType:
+          type: string
+          description: docType
+          example: broker
+        email:
+          type: string
+          description: email
+        mcsID:
+          type: string
+          description: mcsID
+          example: SA09090
+        mplID:
+          type: string
+          description: mplID
+          example: CA00162837
+        expiryDate:
+          type: string
+          description: expiryDate
+          example: 2019-02-24T00:00:00 
+        name:
+          type: string
+          description: name
+          example: CMA CGM LA TOUR
+        name_with_nid:
+          type: string
+          description: name_with_nid
+          example: CMA CGM LA TOUR (8001952)        
+        formatted_name:
+          type: string
+          description: formatted_name
+          example: BONITO GROUP PVT LTD (8001952)
+        identifier:
+          type: string
+          description: identifier
+          example: 1100467GST501
+        latest_version:
+          type: integer
+          description: latest_version
+          example: 12
+        phone:
+          type: string
+          description: phone
+          example: 8001952
+        postalCode:
+          type: string
+          description: postalCode
+          example: active
+        trxnId:
+          type: string
+          description: trxnid
+          example: 000-000-ABCDED
+        updatedBy:
+          type: string
+          description: updatedBy
+          example: suddttt2
+        updatedTS:
+          type: string
+          description: updatedTS
+          example: 2020.11.09.11.24.13.433
+        updated_at:
+          type: string
+          description: updated_at
+          example: 04G6FW1MA
+        profile_id:
+          type: integer
+          description: profile_id
+          example: 1898
+        profileable_id:
+          type: integer
+          description: profileable_id
+          example: 1898
+        profileable_type:
+          type: integer
+          description: profileable_type
+          example: 1
+        stateLetter:
+          type: string
+          description: stateLetter
+          example: 2001
+        tin:
+          type: string
+          description: tin
+          example: K
+        verified:
+          type: integer
+          description: verified
+          example: 1
+    Voyage:
+      type: object
+      properties:
+        arrivalNoticeId:
+          type: string
+          description: arrivalNoticeId
+          example: 239
+        agentID:
+          type: string
+          description: agentID
+          example: BAHAMAS
+        agentName:
+          type: string
+          description: agentName
+          example: suddutt2
+        arrivalDate:
+          type: string
+          description: arrivalDate
+          example: 2020.11.09.11.24.13.433
+        arrivalTime:
+          type: string
+          description: arrivalTime
+          example: 2019-02-21T00:00:00
+        arrivalDraft:
+          type: string
+          description: arrivalDraft
+          example: 11951
+        arrivalRemarks:
+          type: string
+          description: arrivalRemarks
+          example: 11951
+        lastDeparturePortDate:
+          type: string
+          description: lastDeparturePortDate
+        lastDeparturePortTime:
+          type: string
+          description: lastDeparturePortTime
+          example: broker
+        departureRemarks:
+          type: string
+          description: departureRemarks
+        destinationPortCode:
+          type: string
+          description: destinationPortCode
+          example: SA09090
+        destinationPortName:
+          type: string
+          description: destinationPortName
+          example: CA00162837
+        eta:
+          type: string
+          description: eta
+          example: 2019-02-24T00:00:00 
+        grossTonnage:
+          type: string
+          description: grossTonnage
+          example: CMA CGM LA TOUR
+        srcPortCode:
+          type: string
+          description: srcPortCode
+          example: CMA CGM LA TOUR (8001952)        
+        srcPortName:
+          type: string
+          description: srcPortName
+          example: BONITO GROUP PVT LTD (8001952)
+        voyageName:
+          type: string
+          description: voyageName
+          example: 1100467GST501
+        cargoOnBoardTonnage:
+          type: integer
+          description: cargoOnBoardTonnage
+          example: 12
+        netTonnage:
+          type: string
+          description: netTonnage
+          example: 8001952
+        totalCrew:
+          type: string
+          description: totalCrew
+          example: active
+        containerCount:
+          type: string
+          description: containerCount
+          example: 000-000-ABCDED
+        cCount:
+          type: string
+          description: cCount
+          example: suddttt2
+        dangerousCargoTonnage:
+          type: string
+          description: dangerousCargoTonnage
+          example: 2020.11.09.11.24.13.433
+        vesselHash:
+          type: string
+          description: vesselHash
+          example: 04G6FW1MA
+        vesselID:
+          type: string
+          description: vesselID
+          example: 1898
+        vesselName:
+          type: string
+          description: vesselName
+          example: 1898
+        vesselTypeID:
+          type: string
+          description: vesselTypeID
+          example: 1
+        voyageNumber:
+          type: string
+          description: voyageNumber
+          example: 2001
+        vesselRegistrationNumber:
+          type: string
+          description: vesselRegistrationNumber
+          example: K
+        voyageTypeId:
+          type: string
+          description: voyageTypeId
+          example: 1  
+        vesselOwner:
+          type: string
+          description: vesselOwner
+          example: ABC
+        vesselFlag:
+          type: string
+          description: vesselFlag
+          example: 1
+        callSign:
+          type: string
+          description: callSign
+          example: jiji
+        status:
+          type: string
+          description: status
+          example: active
+        keelLaid:
+          type: string
+          description: keelLaid
+          example: UIUI
+    Manifest:
+      type: object
+      properties:
+        arrivalNoticeId:
+          type: string
+          description: arrivalNoticeId
+          example: AN288986
+        bolList:
+          type: array
+          description: bolList
+          items: 
+            type: string
+            example: AN288986-THD0585321
+        bolMap:
+          type: object
+          description: bolMap
+          additionalProperties:
+            $ref: '#/components/schemas/BolMap'
+        carrierName:
+          type: string
+          description: carrierName
+          example: 2020.11.09.11.24.13.433
+        createTs:
+          type: string
+          description: createTs
+        createdBy:
+          type: string
+          description: createdBy
+        customsOffCode:
+          type: string
+          description: customsOffCode
+        cutOffDate:
+          type: string
+          description: cutOffDate
+          example: Thu Nov 26 2020 00:00:00 GMT+0530 (India Standard Time)
+        docType:
+          type: string
+          description: docType
+          example: manifest
+        grossWeight:
+          type: string
+          description: grossWeight
+        manifestID:
+          type: string
+          description: manifestID
+        netTonnage:
+          type: string
+          description: netTonnage
+        shippingAgentID:
+          type: string
+          description: shippingAgentID
+        status:
+          type: string
+          description: status
+        totalBolCount:
+          type: string
+          description: totalBolCount
+        totalContainerCount:
+          type: string
+          description: totalContainerCount
+        trxnId:
+          type: string
+          description: trxnId
+        updatedBy:
+          type: string
+          description: updatedBy
+        updatedTs:
+          type: string
+          description: updatedTs
+        voyageDetails:
+          $ref: '#/components/schemas/Voyage'
+        voyageID:
+          type: string
+          description: voyageID
+          
+        
+        
+        
+          
+          
+          
+          
