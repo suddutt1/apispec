@@ -1,0 +1,238 @@
+openapi: '3.0.0'
+info:
+  title: Blockchain System Extenal API Specification
+  version: '1.0'
+servers:
+  - url: https://169.38.98.162:8443
+paths:
+  /health:
+    description: This health check API is used to check the availabily of the API service. 
+    get:
+      responses:
+        '200':
+          description: Service is up and running 
+  /auth/login:
+    description: Validates the user id and password and return a bearer token that should be useded in other apis
+    post:
+      requestBody:
+        description: Login request body
+        required: true
+        content:
+          applicaiton/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: User id to access the API
+                password:
+                  type: string 
+                  description: Password for accessing the API
+      responses:
+        '200': 
+           description: Login successful
+           content:
+             applicaiton/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      description: Created JWT token. Valid for 60 minutes
+                      type: string 
+        '401':
+            description: Unauthorized access
+        '500':
+            description: Invalid input provided
+  /mpl/gatepass:
+    description: API to post a gatepass details in blockchain system
+    post:
+      security:
+        - bearerAuth: []    
+      requestBody:
+        description: Gatepass details update request format
+        required: true
+        content: 
+          application/json:
+            example: 
+             "gatepass_number": "MPL/GP/20/00021"
+             "vessel_name" : "BBC FLORIDA"
+             "arrival_date" : "17 Mar 2021 *"
+             "consignee" : "ISLAND MARINE CRAFT PRIVATE LIMITED"
+             "bl" : "AFTMLE200800036"
+             "delivery_mode" : "Vehicle"
+             "delivery_type" : "Cargo"
+             "global_id": "BOL1613045926276979584"
+             "released_by": "Sudip Dutta"
+             "released_date": "2021-03-17 11:10:39"
+             "r_no" : "R-06786"
+             "received_by": "Afeef Abdul Qadheer"
+             "customs_approved_by": "Hema"
+             "customs_approved_date": "2021-02-16 19:10:39"
+             "address": "Diamond Villa"
+             "status": "Released"
+             "released_cargo" :
+                - "quantity": 1
+                  "package_type": "Box"
+                  "container_no": "JCLU9220241-40"
+                  "cargo_description": "Test Cargo"
+                  "global_id": "CARGO0-AN125512-DHD0585391-HBLAFTMLE200800036" 
+            schema:
+              type: object
+              properties:
+                gatepass_number:
+                  type: string
+                  description: Gatepass number provided by MPL
+                vessel_name:
+                  type: string
+                  description: As per MPL system
+                arrival_date:
+                  type: string
+                  description: As per MPL system
+                consignee:
+                  type: string
+                  description: Consignee name as per MPL system
+                bl:
+                  type: string 
+                  description: BOL number associated with gatepass item as sent by blockchain system during BOL registration in MPL
+                delivery_mode:
+                  type: string
+                  description: As per MPL system  
+                delivery_type:
+                  type: string
+                  description: As per MPL system  
+                global_id:
+                  type: string
+                  description: As per MPL system  
+                released_by:
+                  type: string
+                  description: As per MPL system 
+                released_date:
+                  type: string
+                  description: As per MPL system 
+                r_no:
+                  type: string
+                  description: As per MPL system
+                received_by:
+                  type: string
+                  description: As per MPL system
+                customs_approved_by:
+                  type: string
+                  description: As per MPL system
+                customs_approved_date:
+                  type: string
+                  description: As per MPL system
+                address:
+                  type: string
+                  description: As per MPL system
+                status:
+                  type: string
+                  description: As per MPL system
+                released_cargo:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      quantity:
+                        type: number
+                        description: Quantiry of the cargo in the gatepass
+                      package_type:
+                        type: string
+                        description: Packing type
+                      container_no:
+                        type: string
+                        description: Self explanatory 
+                      cargo_description:
+                        type: string
+                        description: Self explanatory 
+                      global_id:
+                        type: string
+                        description: CARGO ID as sent by blockchain system during BOL registration in MPL
+
+      responses:
+        '200':
+           description: Gate pass details updated successfully 
+           content:
+            application/json:
+               schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     description: Success message
+                   isSuccess:
+                     type: boolean
+                     description: Success flag. Set to true. 
+        '400':
+           description: Update failed 
+           content:
+            application/json:
+               schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     description: |
+                       Returned error message.
+                   isSuccess:
+                     type: boolean
+                     description: Success flag. Set to false. 
+          
+
+  /mpl/eta:
+    description: API to update the ETA information
+    post:
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: ETA update request body
+        required: true
+        
+        content:
+          applicaiton/json:
+            schema:
+              type: object
+              properties:
+                voyageNumber:
+                  type: string
+                  description: Blockchain Voyage number
+                eta:
+                  type: string
+                  description: New ETA time in YYYY-MM-DD HH:MM
+                  format: YYYY-MM-DD<space>HH:MM
+                  example: 2021-04-12 10:20
+      responses:
+        '200':
+           description: ETA updated successfully 
+           content:
+            application/json:
+               schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     description: Success message
+                   isSuccess:
+                     type: boolean
+                     description: Success flag. Set to true. 
+        '400':
+           description: Update failed 
+           content:
+            application/json:
+               schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     description: |
+                       Returned error message.
+                   isSuccess:
+                     type: boolean
+                     description: Success flag. Set to false. 
+
+components:
+  securitySchemes:
+    bearerAuth:        
+      description: Use the header Authorization with value Bearer <token>     
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
